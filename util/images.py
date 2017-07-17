@@ -11,7 +11,7 @@ def load_image_PIL(imname):
             ))
             return im
         except IOError:
-            print ('failed to load image: attempt %d / 10' % (iii + 1))
+            print ('failed to load image %s: attempt %d / 10' % (imname, iii + 1))
             time.sleep(10)
 
     raise IOError
