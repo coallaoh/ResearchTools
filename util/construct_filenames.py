@@ -3,8 +3,8 @@ import numpy as np
 import types
 import sys
 
-def create_token(a):
 
+def create_token(a):
     if not a:
         return ''
 
@@ -13,12 +13,12 @@ def create_token(a):
     names = []
 
     for key in keyvalues:
-        
+
         category = key
-        value = a[ key ];
-        
-        if sys.version[0]=='3':
-        
+        value = a[key];
+
+        if sys.version[0] == '3':
+
             if type(value) == bool:
                 if value:
                     name = category
@@ -39,12 +39,12 @@ def create_token(a):
             elif type(value) == list:
                 name = category + ':' + str(value)
             elif type(value) == dict:
-                name = category + ':' + '(' + create_token( value ) + ')'
+                name = category + ':' + '(' + create_token(value) + ')'
             else:
-                print ("create_token: take care of the case for type " + str( type(value) ))
-                
+                print ("create_token: take care of the case for type " + str(type(value)))
+
         else:
-        
+
             if type(value) == types.BooleanType:
                 if value:
                     name = category
@@ -63,11 +63,11 @@ def create_token(a):
             elif type(value) == types.ListType:
                 name = category + ':' + str(value)
             elif type(value) == types.DictionaryType:
-                name = category + ':' + '(' + create_token( value ) + ')'
+                name = category + ':' + '(' + create_token(value) + ')'
             else:
-                print ("create_token: take care of the case for type " + str( type(value) ))
-        
-        names.append( name )
+                print ("create_token: take care of the case for type " + str(type(value)))
+
+        names.append(name)
 
     names.sort()
 
@@ -77,7 +77,3 @@ def create_token(a):
         output = output + '_' + name
 
     return output
-
-
-
-
