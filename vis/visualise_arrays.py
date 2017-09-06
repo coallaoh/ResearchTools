@@ -12,8 +12,9 @@ def print_mat(M):
     sh = np.shape(M)
     for ind_x in range(sh[0]):
         for ind_y in range(sh[1]):
-            print ('%2.2f  ' % (M[ind_x,ind_y]), end="")
-        print ("\n", end="")
+            print('%2.2f  ' % (M[ind_x, ind_y]), end="")
+        print("\n", end="")
+
 
 def visualise_time_series(V, fignum=1, title='plot', xlabel='x', ylabel='y'):
     plt.plot(V)
@@ -22,9 +23,10 @@ def visualise_time_series(V, fignum=1, title='plot', xlabel='x', ylabel='y'):
     plt.title(title)
     plt.show()
 
+
 def histogram_array(V, n_bins=10, x_label='variable'):
-    n, bins, patches = plt.hist( V, n_bins, normed=1, facecolor='blue', alpha=0.75 )
-    plt.xlabel( x_label )
-    plt.ylabel( 'frequency' )
+    n, bins, patches = plt.hist(V, n_bins, normed=1, facecolor='blue', alpha=0.75)
+    plt.xlabel(x_label)
+    plt.ylabel('frequency')
     plt.grid(True)
     plt.show()

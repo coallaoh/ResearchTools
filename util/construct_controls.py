@@ -16,8 +16,8 @@ def defaults(control, defaults_control):
     control_token = copy.deepcopy(control)
     for ky in defaults_control:
         if ky in control_token.keys():
-            if isinstance(control, dict):
-                assert (isinstance(defaults_control, dict))
+            if isinstance(control_token[ky], dict):
+                assert (isinstance(defaults_control[ky], dict))
                 if control_token[ky] == defaults_control[ky]:
                     control_token.pop(ky)
                 else:
@@ -28,3 +28,13 @@ def defaults(control, defaults_control):
                     control_token.pop(ky)
 
     return control_token
+
+
+def apply_explist(control, exp_configs):
+    # import copy
+    for ky in exp_configs:
+        assert (ky in control.keys())
+        if isinstance(control[ky], dict):
+            apply_explist(control[ky], exp_configs[ky])
+        else:
+            control[ky] = exp_configs[ky]
