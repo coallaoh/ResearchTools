@@ -1,6 +1,4 @@
-from pdb import set_trace as st
 import numpy as np
-import math, cv2
 
 
 def is_quadratic(num):
@@ -24,18 +22,6 @@ def linear_transform_01(A):
     max_A = np.max(A).astype(np.float)
     min_A = np.min(A).astype(np.float)
     return (A - min_A) / (max_A - min(A))
-
-
-def softmax(w, t=1.0, axis=0):
-    w = np.array(w)  # n by k array
-    e = np.exp(np.array(w) / t)
-    Z = np.sum(e, axis=axis)
-
-    reshapedim = np.array([1, 1], dtype=np.int)
-    reshapedim[axis] = w.shape[axis]
-
-    out = e / np.tile(Z, reshapedim)
-    return out
 
 
 def Jsoftmax(w, t=1.0, axis=0):
@@ -67,17 +53,6 @@ def proj_lp(v, xi, p):
         return v_projected
     else:
         return v
-
-
-def proj_lf(v, ty, deg):
-    assert (len(v.shape) == 3)
-    v_projected = np.zeros_like(v)
-    if ty == 'G':
-        for i in range(v.shape[0]):
-            v_projected[i] = cv2.GaussianBlur(v[i], (deg, deg), 0)
-    else:
-        raise
-    return v_projected
 
 
 def compute_percentiles(x, thres=0.25):
