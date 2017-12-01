@@ -26,6 +26,12 @@ class experiment_control(object):
         self.token = create_token(self.control_token)
         self._set_maindir()
 
+    def update_token(self):
+        self.control_token = self._apply_defaults(self.control, self._default)
+        self._apply_excludes(self.control_token, self._exclude)
+        self._clean_token(self.control_token)
+        self.token = create_token(self.control_token)
+
     def _clean_token(self, control_token):
         for ky in control_token.keys():
             subct = control_token[ky]
@@ -35,20 +41,23 @@ class experiment_control(object):
                 else:
                     self._clean_token(subct)
 
-    def filemanager(self, filename, pathname, override=False, ignore=()):
+    def filemanager(self, filename, pathname, override=False, ignore=(), assert_exist=False):
         if len(ignore) == 0:
             path = osp.join(self.maindir, filename)
         else:
             ct = copy.deepcopy(self.control_token)
             for ig in ignore:
                 self._remove_item(ct, ig.split('/'))
-            path = osp.join('cache', self.conf['exp_phase'], create_token(ct))
+            self._clean_token(ct)
+            path = osp.join('cache', self.conf['exp_phase'], create_token(ct), filename)
 
         if not (self.conf['overridecache'] or override):
             if osp.isfile(path):
                 from util.exceptions import CacheFileExists
                 raise CacheFileExists("File %s already exists!" % path)
         self.dirs[pathname] = path
+        if assert_exist:
+            assert (osp.isfile(path))
 
     def _set_maindir(self):
         self.maindir = osp.join('cache', self.conf['exp_phase'], self.token)
@@ -74,16 +83,28 @@ class experiment_control(object):
         return control_token
 
     def _remove_item(self, obj, removeloc):
+        if removeloc[0] not in obj.keys():
+            return
         if len(removeloc) == 1:
             if removeloc[0] in obj.keys():
                 obj.pop(removeloc[0])
         else:
             self._remove_item(obj[removeloc[0]], removeloc[1:])
 
+    def _get_attr(self, ct, attr):
+        if isinstance(ct[attr[0]], dict):
+            return self._get_attr(ct[attr[0]], attr[1:])
+        else:
+            return ct[attr[0]]
+
     def _apply_excludes(self, control, exclude):
         for ex in exclude:
-            ky = ex['condition'].keys()[0]
-            if control[ky] == ex['condition'][ky]:
+            if 'condition' in ex.keys():
+                ky = ex['condition'].keys()[0]
+                control_attr = self._get_attr(self.control, ky.split('/'))
+                if control_attr == ex['condition'][ky]:
+                    self._remove_item(control, ex['remove'].split('/'))
+            else:
                 self._remove_item(control, ex['remove'].split('/'))
 
     def _print(self):
