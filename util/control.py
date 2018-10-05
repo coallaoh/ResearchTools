@@ -110,7 +110,7 @@ class experiment_control(object):
     def _print(self):
         print(":" * 50)
         print("Machine : %s" % platform.node())
-        print("GPU : %d" % self.conf['gpu'])
+        print("GPU : {}".format(self.conf['gpu']))
         print("PID : %d" % os.getpid())
         print(">>> Exp Name <<<")
         print(self.conf['exp_phase'])
