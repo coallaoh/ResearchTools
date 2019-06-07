@@ -1,4 +1,5 @@
 import os
+import sys
 from pdb import set_trace as st
 
 try:
@@ -35,6 +36,8 @@ def save_to_cache(variable, cachename):
     pickle.dump(variable, fp)
 
 
-def load_from_cache(cachename):
+def load_from_cache(cachename, python23_conversion=False):
     fp = open(cachename, 'rb')
-    return pickle.load(fp, encoding='latin1')
+    if (sys.version_info[0] >= 3) and python23_conversion:
+        return pickle.load(fp, encoding='latin1')
+    return pickle.load(fp)
