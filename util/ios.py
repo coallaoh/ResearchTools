@@ -37,4 +37,4 @@ def save_to_cache(variable, cachename):
 
 def load_from_cache(cachename):
     fp = open(cachename, 'rb')
-    return pickle.load(fp)
+    return pickle.load(fp, encoding='latin1')
