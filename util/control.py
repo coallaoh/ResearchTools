@@ -100,7 +100,7 @@ class experiment_control(object):
     def _apply_excludes(self, control, exclude):
         for ex in exclude:
             if 'condition' in ex.keys():
-                ky = ex['condition'].keys()[0]
+                ky = list(ex['condition'].keys())[0]
                 control_attr = self._get_attr(self.control, ky.split('/'))
                 if control_attr == ex['condition'][ky]:
                     self._remove_item(control, ex['remove'].split('/'))
